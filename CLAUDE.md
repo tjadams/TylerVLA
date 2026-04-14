@@ -71,3 +71,14 @@ python -m pytest tests/
 ```
 
 Validation loss is logged during training. Smoke test: `mjpython simulation/simulate.py --policy`.
+
+## Docker
+
+Runs the test suite in a containerized environment with all deps pre-installed (CPU-only PyTorch).
+
+```bash
+docker build -t tylervla .
+docker run tylervla
+```
+
+Note: `lerobot` is not installed in the Docker image. Real-robot tests and `real_robot/inference.py` require a local conda environment (`conda activate lerobot`).

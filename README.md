@@ -123,4 +123,15 @@ Record demonstrations at (say) 10–30 Hz and save one dataset file:
 - demo_text.json contains text array length N
 
 
+## Docker
+
+Run the test suite in a container with all dependencies pre-installed (CPU-only PyTorch, MuJoCo, OpenCV, etc.):
+
+```bash
+docker build -t tylervla .
+docker run tylervla
+```
+
+No conda or local setup required — everything is installed at build time. Note: `lerobot` is not installed in the Docker image. Real-robot tests and deployment require a local conda environment (`conda activate lerobot`).
+
 Note: commit history for TylerVLA older than 4/14/26 is available in my learning-deeplearning repo, up to this commit: https://github.com/tjadams/Learning-DeepLearning/commit/b96fa9789b0eb16df23883ee463960204741e6db
