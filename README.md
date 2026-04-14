@@ -121,3 +121,6 @@ Record demonstrations at (say) 10–30 Hz and save one dataset file:
 - Easiest: store as a .npz plus a .json for texts. Example:
 - demo.npz contains images, joints
 - demo_text.json contains text array length N
+
+
+Note: commit history for TylerVLA older than 4/14/26 is available in my learning-deeplearning repo, up to this commit: https://github.com/tjadams/Learning-DeepLearning/commit/b96fa9789b0eb16df23883ee463960204741e6db
