@@ -7,6 +7,13 @@
 #   real_robot/recording_training_data/record_episode.sh
 #
 # See ../../architecture/lerobot_training.md for the normalization chain.
+#
+# Controls (keys go to the --display_data window, not the terminal):
+#   →   end current episode + advance to the next   ←   re-record current episode
+#   Esc finish the session cleanly (encodes video, writes metadata) — the correct way to quit
+# Records NUM_EPISODES back-to-back, each ≤ episode_time_s (default 60s). Never Ctrl+C:
+# it skips encoding and leaves partial files. macOS: these keys use pynput and need
+# Accessibility permission for your terminal (System Settings → Privacy & Security → Accessibility).
 set -euo pipefail
 
 # ---- Configure these ----
@@ -17,7 +24,8 @@ FPS=30                            # match existing episodes (abc2/so-arm-101 is 
 NUM_EPISODES=5
 REPO_ID="tylervla/pick-place"
 TASK="pick up the ball and place it in the bowl"
-DATASET_ROOT="${HOME}/tylervla_datasets/pick-place"   # local folder to store the dataset
+# Timestamped so each run writes a fresh dataset — lerobot errors if the root already exists.
+DATASET_ROOT="${HOME}/tylervla_datasets/pick-place_$(date +%Y%m%d_%H%M%S)"
 # -------------------------
 
 # push_to_hub defaults to true — keep it false to stay local, no HuggingFace upload.
