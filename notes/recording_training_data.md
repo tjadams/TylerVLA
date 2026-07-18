@@ -14,6 +14,8 @@ Controls during recording:
 4. Ctrl+C: breaks recording and leaves partial files
 
 ## 7-18-26: session notes
+Results: 5 successful episodes, bugfixes, tuning scripts, human-robot-control skill improvements
+
 Improvements this session:
 - My skills in controlling the leader to implicitly control the follower, improved
 - Putting laptop down on my workout bench is a good place for it
