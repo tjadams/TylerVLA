@@ -6,20 +6,16 @@
 
 Steps:
 1. Enable Continuity Camera on iPhone: Settings → General → AirPlay & Continuity
-2. conda activate lerobot
-3. (Optional) probe_cameras.py
-4. (Optional) ls /dev/tty.usbmodem* to find the FOLLOWER_PORT/LEADER_PORT for putting in the next script
-5. real_robot/recording_training_data/record_episode.sh
+2. Set up packages: `conda activate lerobot`
+3. Confirm camera is set up: `python real_robot/recording_training_data/probe_cameras.py`
+4. Confirm 2 robots are connected: `ls /dev/tty.usbmodem*` (also finds 2 ports for next script)
+5. Record: `real_robot/recording_training_data/record_episode.sh`
 
-Controls while recording (keys go to the --display_data/rerun window, not the terminal):
-- → : end the current episode early and advance (normal "done with this demo")
-- ← : discard and re-record the current episode (fumbled the grasp)
-- Esc : stop the whole session cleanly — encodes videos, writes metadata (the correct way to quit)
+Controls during recording: 
+1. Right arrow: end episode
+2. Left arrow: re-record current episode
+3. Escape: finish recording (encodes video, writes metadata)
+4. Ctrl+C: breaks recording and leaves partial files
 
-Records NUM_EPISODES back-to-back; each runs ≤ episode_time_s (default 60s) with a reset window between to reposition the ball. Never Ctrl+C — it skips encoding and leaves partial files.
-macOS: these keys use pynput, which needs Accessibility permission. Grant your terminal under System Settings → Privacy & Security → Accessibility.
-
-Dataset layout (one per episode):
-- data/chunk-000/episode_*.parquet — numeric time-series, one row per frame: `action` [6] (leader command), `observation.state` [6] (follower actual position, what convert_lerobot.py trains on), plus timestamp/frame_index. Parquet = columnar table, read via pd.read_parquet.
-- videos/chunk-000/.../episode_*.mp4 — the camera frames (not stored in the parquet).
-- Both are written only at episode/session finalize. A Ctrl+C'd run leaves buffered raw PNGs and no parquet — hence useless.
+Bug: re-record episode with left arrow results in this error.
+`OSError: [Errno 66] Directory not empty: '/Users/tjadams/tylervla_datasets/pick-place_20260718_124803/images/observation.images.front/episode_000001'`

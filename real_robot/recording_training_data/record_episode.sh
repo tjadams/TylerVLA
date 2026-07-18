@@ -1,24 +1,34 @@
 #!/usr/bin/env bash
-# Record SO-ARM-101 teleoperation episodes into a LeRobot dataset, then convert
-# to TylerVLA .npz/.json. Fill in the ports (ls /dev/tty.usbmodem*) and the
-# iPhone camera index from probe_cameras.py before running.
-#
-#   conda activate lerobot
-#   real_robot/recording_training_data/record_episode.sh
-#
+# 
+# Overview:
+# Record SO-ARM-101 teleoperation episodes into a LeRobot dataset.
+# Later, convert to TylerVLA .npz/.json. 
+
+# Details:
+# Records NUM_EPISODES back-to-back
+# Each episode ≤ episode_time_s (default 60s)
+# keys go to the --display_data / rerun.io window, not the terminal
+# macOS: these keys use pynput and may need accessibility permissions
 # See ../../architecture/lerobot_training.md for the normalization chain.
-#
-# Output layout (per episode): data/*/episode_*.parquet holds the numeric time-series
-# (action [6] = leader command, observation.state [6] = follower actual, + timestamps),
-# and videos/*/episode_*.mp4 holds the camera. Parquet + mp4 are written only at
-# episode/session finalize — a Ctrl+C'd run leaves raw PNGs and no parquet.
-#
-# Controls (keys go to the --display_data window, not the terminal):
-#   →   end current episode + advance to the next   ←   re-record current episode
-#   Esc finish the session cleanly (encodes video, writes metadata) — the correct way to quit
-# Records NUM_EPISODES back-to-back, each ≤ episode_time_s (default 60s). Never Ctrl+C:
-# it skips encoding and leaves partial files. macOS: these keys use pynput and need
-# Accessibility permission for your terminal (System Settings → Privacy & Security → Accessibility).
+# 
+
+# Usage to start recording:
+# 1. conda activate lerobot
+# 2. real_robot/recording_training_data/record_episode.sh
+
+# Controls during recording: 
+# Right arrow: end episode
+# Left arrow: re-record current episode
+# Escape: finish recording (encodes video, writes metadata)
+# Ctrl+C: breaks recording and leaves partial files
+
+# Output layout (per episode): 
+# data/*/episode_*.parquet holds the numeric time-series
+#   action [6] = leader 
+#   observation.state [6] = follower
+#   timestamps
+# videos/*/episode_*.mp4
+# Parquet + mp4 are written only at episode/session finalize
 set -euo pipefail
 
 # ---- Configure these ----
@@ -27,8 +37,11 @@ LEADER_PORT="/dev/tty.usbmodem5A460825831"
 CAMERA_INDEX=1                    # from probe_cameras.py (iPhone, not 0/FaceTime)
 FPS=30                            # match existing episodes (abc2/so-arm-101 is 30 fps)
 NUM_EPISODES=5
+EPISODE_TIME_S=100               # per-episode cap; huge value = effectively no timeout, → ends the episode
+RESET_TIME_S=15                  # pause between episodes to reset the environment
 REPO_ID="tylervla/pick-place"
-TASK="pick up the ball and place it in the bowl"
+# TASK="pick up the ball and place it in the bowl"
+TASK="pick up the medicine bottle and place it in the bowl"
 # Timestamped so each run writes a fresh dataset — lerobot errors if the root already exists.
 DATASET_ROOT="${HOME}/tylervla_datasets/pick-place_$(date +%Y%m%d_%H%M%S)"
 # -------------------------
@@ -48,6 +61,8 @@ python -m lerobot.record \
     --dataset.root="${DATASET_ROOT}" \
     --dataset.push_to_hub=false \
     --dataset.num_episodes="${NUM_EPISODES}" \
+    --dataset.episode_time_s="${EPISODE_TIME_S}" \
+    --dataset.reset_time_s="${RESET_TIME_S}" \
     --dataset.single_task="${TASK}"
 
 echo
