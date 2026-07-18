@@ -43,11 +43,13 @@ REPO_ID="tylervla/pick-place"
 # TASK="pick up the ball and place it in the bowl"
 TASK="pick up the medicine bottle and place it in the bowl"
 # Timestamped so each run writes a fresh dataset — lerobot errors if the root already exists.
-DATASET_ROOT="${HOME}/tylervla_datasets/pick-place_$(date +%Y%m%d_%H%M%S)"
+DATASET_ROOT="${HOME}/tylervla_datasets/raw/pick-place_$(date +%Y%m%d_%H%M%S)"
 # -------------------------
 
+# Runs lerobot.record via record_patched.py, a thin wrapper that fixes the
+# left-arrow re-record crash ("Directory not empty"). See that file for details.
 # push_to_hub defaults to true — keep it false to stay local, no HuggingFace upload.
-python -m lerobot.record \
+python "$(dirname "$0")/record_patched.py" \
     --robot.type=so101_follower \
     --robot.port="${FOLLOWER_PORT}" \
     --robot.id=my_awesome_follower_arm \
