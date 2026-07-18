@@ -14,15 +14,17 @@ Controls during recording:
 4. Ctrl+C: breaks recording and leaves partial files
 
 ## 7-18-26: session notes
-Results: 5 successful episodes, bugfixes, tuning scripts, human-robot-control skill improvements
+Results: 5 successful episodes, bugfixes, tuning scripts, human-robot-control skill improvements, compression script
 
 Improvements this session:
 - My skills in controlling the leader to implicitly control the follower, improved
 - Putting laptop down on my workout bench is a good place for it
+- Created a compression script using ffmpeg, reduced from 150mb to 9mb mp4s
 
 Improvements for future sessions:
 - Not yet, but perhaps longer usb-c cables
 - Bluetooth keyboard because when I want to press keyboard controls during recording, I move in front of the camera
+- Call compression script (real_robot/utils/compress_video.sh) in record_episode.sh
 
 Issue observed: I controlled the follower perhaps a bit too hard on the leader size when squeezing the medicine container, and it got upset and went fully open on the end effector. Then I saw this log: RuntimeError: Failed to write 'Torque_Enable' on id_=6 with '0' after 6 tries. [RxPacketError] Overload error!
 
