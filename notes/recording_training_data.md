@@ -18,3 +18,8 @@ Controls while recording (keys go to the --display_data/rerun window, not the te
 
 Records NUM_EPISODES back-to-back; each runs ≤ episode_time_s (default 60s) with a reset window between to reposition the ball. Never Ctrl+C — it skips encoding and leaves partial files.
 macOS: these keys use pynput, which needs Accessibility permission. Grant your terminal under System Settings → Privacy & Security → Accessibility.
+
+Dataset layout (one per episode):
+- data/chunk-000/episode_*.parquet — numeric time-series, one row per frame: `action` [6] (leader command), `observation.state` [6] (follower actual position, what convert_lerobot.py trains on), plus timestamp/frame_index. Parquet = columnar table, read via pd.read_parquet.
+- videos/chunk-000/.../episode_*.mp4 — the camera frames (not stored in the parquet).
+- Both are written only at episode/session finalize. A Ctrl+C'd run leaves buffered raw PNGs and no parquet — hence useless.

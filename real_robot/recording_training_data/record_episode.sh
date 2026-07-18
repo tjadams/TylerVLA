@@ -8,6 +8,11 @@
 #
 # See ../../architecture/lerobot_training.md for the normalization chain.
 #
+# Output layout (per episode): data/*/episode_*.parquet holds the numeric time-series
+# (action [6] = leader command, observation.state [6] = follower actual, + timestamps),
+# and videos/*/episode_*.mp4 holds the camera. Parquet + mp4 are written only at
+# episode/session finalize — a Ctrl+C'd run leaves raw PNGs and no parquet.
+#
 # Controls (keys go to the --display_data window, not the terminal):
 #   →   end current episode + advance to the next   ←   re-record current episode
 #   Esc finish the session cleanly (encodes video, writes metadata) — the correct way to quit
