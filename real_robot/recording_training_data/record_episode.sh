@@ -35,10 +35,10 @@ set -euo pipefail
 FOLLOWER_PORT="/dev/tty.usbmodem5A460830061"
 LEADER_PORT="/dev/tty.usbmodem5A460825831"
 CAMERA_INDEX=1                    # from probe_cameras.py (iPhone, not 0/FaceTime)
-FPS=30                            # match existing episodes (abc2/so-arm-101 is 30 fps)
+FPS=30                            
 NUM_EPISODES=5
-EPISODE_TIME_S=100               # per-episode cap; huge value = effectively no timeout, → ends the episode
-RESET_TIME_S=15                  # pause between episodes to reset the environment
+EPISODE_TIME_S=120               # per-episode cap, will end the episode if reached
+RESET_TIME_S=10                  # pause between episodes to reset the environment
 REPO_ID="tylervla/pick-place"
 # TASK="pick up the ball and place it in the bowl"
 TASK="pick up the medicine bottle and place it in the bowl"
